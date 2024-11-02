@@ -47,11 +47,12 @@
       function convert_to_json(word_list){
         var json_data = [];
         for(let i in word_list){
-            if(word_list[i].length > 0){
-                json_data[i] = {"answer": word_list[i].toLowerCase()};
+            if(word_list[i].trim().length > 0){
+                var parts = word_list[i].split(";");
+                var clue = parts[1] ? parts[1].trim() : '';
+                json_data[i] = {"answer": parts[0].trim().toLowerCase(), "clue": clue};
             }
         }
-
         return json_data;
       }
 
@@ -88,7 +89,7 @@
 
       function button_clicked(){
         // Input data
-        var word_list = document.getElementById("words").value.replace(/[ \r\n,;:-]+/g, ",").split(",");
+        var word_list = document.getElementById("words").value.split('\n');
         if(word_list[0] != ""){
           var input_json = convert_to_json(word_list);
 
@@ -109,7 +110,7 @@
 
           // Display result
           document.getElementById("content").innerHTML = "<h3>Output JSON</h3><br>" + JSON.stringify(output_json) + "<br><br><h3>Output Html</h3><br>" + output_html + "<br><h3>Extra Output: Word Search</h3><br>" + word_search + "<br>";
-          document.getElementById("blank-html-crossword").innerHTML = "<h3>Blank Crossword</h3><br>" + crossword_html;
+          document.getElementById("blank-html-crossword").innerHTML = "<h3>Blank Crossword</h3><br>" + crossword_html; 
         }
       }
     </script>
