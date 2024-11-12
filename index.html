@@ -12,6 +12,16 @@
         color: #444444;
         max-height: 99999999px;
       }
+      .side-panel {
+        position: absolute;
+        top: 100px;
+        right: 50px;
+        width: 300px;
+        border: 1px solid #444;
+        padding: 10px;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+      }
     </style>
   </head>
 
@@ -42,6 +52,11 @@
         </center>
       </div>
     </center>
+
+    <div class="side-panel" id="clues-panel">
+      <h3>Clues</h3>
+      <ul id="clues-list" style="list-style-type: none; padding: 0;"></ul>
+    </div>
 
     <script>
       function convert_to_json(word_list){
@@ -93,6 +108,18 @@
         return htmlText;
       }
 
+      function display_clues(clues) {
+        var cluesList = document.getElementById("clues-list");
+        cluesList.innerHTML = "";
+        clues.forEach((item, index) => {
+          if (item.clue) {
+            var clueItem = document.createElement("li");
+            clueItem.textContent = `${index + 1}. ${item.clue}`;
+            cluesList.appendChild(clueItem);
+          }
+        });
+      }
+
       function button_clicked(){
         // Input data
         var word_list = document.getElementById("words").value.split('\n');
@@ -117,6 +144,7 @@
           // Display result
           document.getElementById("content").innerHTML = "<h3>Output JSON</h3><br>" + JSON.stringify(output_json) + "<br><br><h3>Output Html</h3><br>" + output_html + "<br><h3>Extra Output: Word Search</h3><br>" + word_search + "<br>";
           document.getElementById("blank-html-crossword").innerHTML = "<h3>Blank Crossword</h3><br>" + crossword_html; 
+          display_clues(input_json)
         }
       }
     </script>
