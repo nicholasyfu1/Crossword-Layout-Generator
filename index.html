@@ -108,6 +108,31 @@
         return htmlText;
       }
 
+      function generate_filled_crossword_table(table, output_json) {
+        var htmlText = '<table style="border-collapse: collapse; margin: 0 auto;">';
+        for (let i = 0; i < table.length; i++) {
+          htmlText += '<tr>';
+          for (let j = 0; j < table[i].length; j++) {
+            if (table[i][j] !== '-') { // If letter, add a white cell and display the letter
+              var wordPosition = output_json.find(word => word.startx === j + 1 && word.starty === i + 1); // Find word that starts here
+              if (wordPosition) { // If word starts here, White cell with number and letter
+                htmlText += `<td style="width: 30px; height: 30px; border: 1px solid black; background-color: white; text-align: center; vertical-align: middle; position: relative;">
+                  <span style="font-size: 16px;">${table[i][j]}</span>
+                  <span style="position: absolute; top: 0; left: 0; font-size: 10px;">${wordPosition.position}</span></td>`;
+              } else { // White cell with letter
+                htmlText += `<td style="width: 30px; height: 30px; border: 1px solid black; background-color: white; text-align: center; vertical-align: middle;">
+                  <span style="font-size: 16px;">${table[i][j]}</span></td>`;
+              }
+            } else { // If not letter, add a black cell
+              htmlText += '<td style="width: 30px; height: 30px; border: 1px solid black; background-color: black;"></td>';
+            }
+          }
+          htmlText += '</tr>';
+        }
+        htmlText += '</table>';
+        return htmlText;
+      }
+
       function display_clues(clues) {
         var cluesList = document.getElementById("clues-list");
         cluesList.innerHTML = "";
@@ -141,9 +166,12 @@
           // Generate crossword HTML
           var crossword_html = generate_html_table(layout.table, output_json);
 
+          var filled_crossword_html = generate_filled_crossword_table(layout.table, output_json);
+
           // Display result
           document.getElementById("content").innerHTML = "<h3>Output JSON</h3><br>" + JSON.stringify(output_json) + "<br><br><h3>Output Html</h3><br>" + output_html + "<br><h3>Extra Output: Word Search</h3><br>" + word_search + "<br>";
-          document.getElementById("blank-html-crossword").innerHTML = "<h3>Blank Crossword</h3><br>" + crossword_html; 
+          document.getElementById("blank-html-crossword").innerHTML = "<h3>Blank Crossword</h3><br>" + crossword_html;
+          document.getElementById("content").innerHTML = "<h3>Filled Crossword</h3>" + filled_crossword_html;
           display_clues(input_json)
         }
       }
