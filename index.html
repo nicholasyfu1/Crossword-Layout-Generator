@@ -20,9 +20,14 @@
     <center>
       <br><br>
       <h1>Crossword Layout Generator</h1>
-      <h2>Enter a list of words below, separate words and clues using ";"</h2><br><br>
+      <h2>Enter a list of words below</h2><br><br>
 
       <textarea id="words" rows="9" cols="35" autofocus="autofocus" style="font-size: 16px;" placeholder="Separate words and clues using ; and enter pairs on separate lines..."></textarea><br><br><br><br>
+
+      <h3>Check if a word is in the crossword</h3>
+      <input type="text" id="check-word" placeholder="Enter a word" style="font-size: 16px;">
+      <button onclick="playCrossword();" style="font-size: 14px; cursor: pointer;">Check Word</button>
+      <div id="word-check-result" style="font-size: 16px; margin-top: 10px;"></div>
       
       <button onclick="button_clicked();" style="font-size: 14px; cursor: pointer;">Generate Layout</button><br><br><br>
 
@@ -47,8 +52,6 @@
         </center>
       </div>
     </center>
-
-    
 
     <script>
       function convert_to_json(word_list){
@@ -169,6 +172,31 @@
           document.getElementById("clues-html").innerHTML = "<h3>Clues</h3>" + clues_html;
         }
       }
+
+      function playCrossword() {
+        const wordGuess = document.getElementById("check-word").value.trim().toLowerCase();
+        const wordsInGame = document.getElementById("words").value.split('\n');
+        const crosswordData = convert_to_json(wordsInGame);
+
+        let isWordInCrossword = false;
+        for (let i=0; i<crosswordData.length; i++) {
+          if (crosswordData[i].answer == wordGuess) {
+            isWordInCrossword = true;
+            break;
+          }
+        }
+
+        const result = document.getElementById("word-check-result");
+        if (isWordInCrossword) {
+          result.textContent = `"${wordGuess}" is in the crossword.`;
+          result.style.color = "green";
+        }
+        else {
+          result.textContent = `"${wordGuess}" is NOT in the crossword.`;
+          result.style.color = "red";
+        }
+      }
+
     </script>
 
     <br><br>
