@@ -155,11 +155,43 @@
         return htmlText;
       }
 
-      function button_clicked(){
+      async function generate_missing_clues(input_json) {
+        for (let i = 0; i < input_json.length; i++) {
+          if (input_json[i].clue === '') {
+            let word = input_json[i].answer;
+
+            try {
+              const response = await fetch('http://localhost:3000/generate-clue', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ word }),
+              });
+
+              const data = await response.json();
+
+              if (data.error) {
+                console.error(`Error generating clue for word "${word}": ${data.error}`);
+                input_json[i].clue = '[No clue available]';
+              } else {
+                input_json[i].clue = data.clue;
+              }
+            } catch (error) {
+              console.error(`Error generating clue for word "${word}": ${error}`);
+              input_json[i].clue = '[No clue available]';
+            }
+          }
+        }
+      }
+
+      async function button_clicked(){
         // Input data
         var word_list = document.getElementById("words").value.split('\n');
         if(word_list[0] != ""){
           var input_json = convert_to_json(word_list);
+
+          await generate_missing_clues(input_json);
 
           // Output data
           var layout = generateLayout(input_json);
