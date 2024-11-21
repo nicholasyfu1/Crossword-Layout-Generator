@@ -5,6 +5,11 @@
     <meta name="description" content="An open source crossword layout generator.">
     <meta name="author" content="Michael Wehar">
     <script src="layout_generator.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+    <script src="html2pdf.bundle.min.js"></script>
+
     <style>
       div.footer{
         width: 400px;
@@ -38,6 +43,11 @@
       <div id="clues-html" style="font-family: 'Courier New', Courier, monospace"></div>
 
       <div id="filled-html-crossword" style="font-family: 'Courier New', Courier, monospace"></div><br>
+
+      <div class="controls">
+        <button onclick="downloadBlankPDF();">Download Blank Crossword PDF</button>
+        <button onclick="downloadFilledPDF();">Download Filled Crossword PDF</button>
+      </div>
 
       <h3><a href="https://github.com/MichaelWehar/Crossword-Layout-Generator">View Source Code (MIT License)</a><br><br><br>
       <a href="https://makeprojects.com/project/crossword-layout-generator---open-source">Short Article @ ProjectBoard</a></h3><br><br>
@@ -197,6 +207,58 @@
         }
       }
 
+      function downloadBlankPDF() {
+        // Create a temporary container to hold the combined content
+        const tempContainer = document.createElement("div");
+        tempContainer.id = "temp-pdf-container";
+        tempContainer.style.fontFamily = "'Courier New', Courier, monospace";
+
+        // Get the content of the blank crossword
+        const blankCrossword = document.getElementById("blank-html-crossword").innerHTML;
+
+        // Get the content of the clues
+        const clues = document.getElementById("clues-html").innerHTML;
+
+        // Combine both into the temporary container
+        tempContainer.innerHTML = `
+          ${blankCrossword}
+          <br>
+          ${clues}
+        `;
+
+        // Append the temporary container to the body (hidden)
+        document.body.appendChild(tempContainer);
+
+        // Define options for html2pdf
+        const options = {
+          margin: 1,
+          filename: 'blank_crossword_with_clues.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        // Generate and download the PDF
+        html2pdf()
+          .set(options)
+          .from(tempContainer)
+          .save()
+          .then(() => {
+            // Clean up by removing the temporary container
+            document.body.removeChild(tempContainer);
+          });
+      }
+
+      function downloadFilledPDF() {
+        const element = document.getElementById('filled-html-crossword'); // Target the filled crossword
+        const options = {
+          margin: 1,
+          filename: 'Filled_Crossword.pdf',
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(options).from(element).save();
+      }
     </script>
 
     <br><br>
