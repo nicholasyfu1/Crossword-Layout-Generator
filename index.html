@@ -134,10 +134,13 @@
           <a href="https://www.npmjs.com/package/crossword-layout-generator" target="_blank" class="nav-link me-3">
             <i class="bi bi-boxes" style="font-size: 1.25rem;"></i>
           </a>
-          <div class="form-check form-switch ms-2">
-            <input class="form-check-input" type="checkbox" id="theme-toggle" onclick="toggleTheme();">
-          </div>
-          <i class="bi bi-sun-fill" style="font-size: 1.25rem;"></i>
+          <div class="vr mx-2"></div>
+          <div class="d-flex align-items-center ms-3">
+            <div class="form-check form-switch m-0">
+              <input class="form-check-input" type="checkbox" id="theme-toggle" onclick="toggleTheme();">
+            </div>
+            <i class="bi bi-sun-fill" style="font-size: 1.25rem;"></i>
+          </div> 
         </div>
       </div>
     </nav>
@@ -285,7 +288,7 @@
             if (table[i][j] !== '-') { // If letter, add a white cell and display the letter
               var wordPosition = output_json.find(word => word.startx === j + 1 && word.starty === i + 1); // Find word that starts here
               if (wordPosition) { // If word starts here, White cell with number and letter
-                htmlText += `<td style="width: 30px; height: 30px; border: 1px solid black; background-color: white; text-align: center; vertical-align: middle; position: relative;">
+                htmlText += `<td style="width: 30px; height: 30px; border: 1px solid black; background-color: white; color: black; text-align: center; vertical-align: middle; position: relative;">
                   <span style="font-size: 16px;">${table[i][j]}</span>
                   <span style="position: absolute; top: 0; left: 0; font-size: 10px;">${wordPosition.position}</span></td>`;
               } else { // White cell with letter
