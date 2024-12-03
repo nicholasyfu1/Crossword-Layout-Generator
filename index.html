@@ -66,6 +66,10 @@
         color: var(--nav-title);
       }
 
+      .form-group label {
+        color: var(--text-secondary);
+      }
+
       .form-control {
         background-color: var(--background-secondary);
         color: var(--input-text);
@@ -149,8 +153,21 @@
       <h1>Generate your own crossword puzzle</h1>
       <h2>Enter a list of words on seperate lines</h2><br>
 
-      <textarea id="words" class="form-control" rows="9" cols="35" autofocus="autofocus" placeholder="Separate words and clues using ; and enter pairs on separate lines..."></textarea>
+      <textarea id="words" class="form-control" rows="6" cols="35" autofocus="autofocus" placeholder="Separate words and clues using ; and enter pairs on separate lines..."></textarea>
       
+      <br><br>
+      
+      <div class="form-group" style="width: 150px;">
+        <label for="maxSizeInput">Maximum Grid Size</label>
+        <input
+          type="number"
+          class="form-control"
+          id="maxSizeInput"
+          value="16"
+          min="5"
+          max="50"
+        />
+      </div>
       <br><br>
       
       <button id="generate-button" class="btn btn-primary" onclick="button_clicked();" style="font-size: 1.25rem;">Generate layout</button>
@@ -367,9 +384,12 @@
             var input_json = convert_to_json(word_list);
 
             await generate_missing_clues(input_json);
+            
+            var maxSizeInput = document.getElementById("maxSizeInput").value;
+            var maxSize = parseInt(maxSizeInput);
 
             // Output data
-            var layout = generateLayout(input_json);
+            var layout = generateLayout(input_json, maxSize);
             var rows = layout.rows;
             var cols = layout.cols;
             var table = layout.table; // table as two-dimensional array
