@@ -283,7 +283,7 @@
               var wordPosition = output_json.find(word => word.startx === j + 1 && word.starty === i + 1); // Find word that starts here
               if (wordPosition) { // If word starts here, White cell with number
                 htmlText += `<td style="width: 30px; height: 30px; border: 1px solid black; background-color: white; position: relative;">
-                  <span style="position: absolute; top: 0; left: 0; font-size: 10px;">${wordPosition.position}</span></td>`;
+                  <span style="position: absolute; top: 0; left: 0; font-size: 10px; color: black;">${wordPosition.position}</span></td>`;
               } else { // Blank white cell
                 htmlText += '<td style="width: 30px; height: 30px; border: 1px solid black; background-color: white;"></td>';
               }
@@ -307,7 +307,7 @@
               if (wordPosition) { // If word starts here, White cell with number and letter
                 htmlText += `<td style="width: 30px; height: 30px; border: 1px solid black; background-color: white; color: black; text-align: center; vertical-align: middle; position: relative;">
                   <span style="font-size: 16px;">${table[i][j]}</span>
-                  <span style="position: absolute; top: 0; left: 0; font-size: 10px;">${wordPosition.position}</span></td>`;
+                  <span style="position: absolute; top: 0; left: 0; font-size: 10px; color: black;">${wordPosition.position}</span></td>`;
               } else { // White cell with letter
                 htmlText += `<td style="width: 30px; height: 30px; border: 1px solid black; background-color: white; text-align: center; vertical-align: middle; color: black;">
                   <span style="font-size: 16px;">${table[i][j]}</span></td>`;
@@ -325,11 +325,12 @@
       function generate_clues(clues) {
         var htmlText = `<ul style="list-style-type: none; padding: 0;">`;
         clues.forEach((item, index) => {
-          if (item.clue) {
+          console.log(item)
+          if (item.clue && item.orientation != "none") {
             const word = `word-${index}`;
             htmlText += `
               <li>
-                ${index + 1}. ${item.clue} 
+                ${item.position}. ${item.clue} 
                 <button onclick="revealWord('${word}', '${item.answer}')" style="margin-left: 10px; font-size: 12px; cursor: pointer;">Reveal Word</button>
                 <span id="${word}" style="margin-left: 10px; font-weight: bold; display: none;"></span>
               </li>`;
@@ -406,7 +407,6 @@
             var filled_crossword_html = generate_filled_crossword_table(layout.table, output_json);
 
             var clues_html = generate_clues(input_json);
-            console.log(clues_html);
 
             // Display result
             document.getElementById("output-json").innerHTML = "<br>" + JSON.stringify(output_json);
