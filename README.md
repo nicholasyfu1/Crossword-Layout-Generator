@@ -10,9 +10,13 @@ This crossword layout generator takes in a list of answers and outputs a crosswo
 ## Running the code locally
 
 **Step 1:** Navigate to the server directory: `cd server`
+
 **Step 2:** Install project dependencies: `npm install`
+
 **Step 3:** Create a file named `.env` in `server`. In the file, add your API key: `OPENAI_API_KEY=your_api_key`
+
 **Step 4:** Start the server with `npm start` (default: port 3000)
+
 **Step 5:** Go back to the main project directory and run the live server extension.
 
 ## Input and Output Format
